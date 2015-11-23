@@ -4,27 +4,35 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
+	"strings"
 )
 
 type Word string
 type Sentence []Word
 
 type Noun uint // zero draft simplification
-type Verb func(...Noun)Noun
+type Verb func(...Noun) Noun
 type Monad Verb
 type Dyad Verb
-type Adverb func(...Verb)Verb
+type Adverb func(...Verb) Verb
 
 func main() {
 	x := read()
-	fmt.Println(rev(x))
+	fmt.Println(x)
 }
 
-func read() string {
-	fmt.Print(" ")
-	x, _ := bufio.NewReader(os.Stdin).ReadString('\n')
+func read() Sentence {
+	fmt.Print(" ") // prompt
+	in, _ := bufio.NewReader(os.Stdin).ReadString('\n') // read line from prompt
 	// ^ ignores reader errror!!!
-	return x[:len(x)-1]
+	in = strings.TrimSpace(in)
+	ss := regexp.MustCompile(" +").Split(in,-1) // assumes space separated words
+	var out Sentence
+	for _, s := range ss {
+		out = append(out, Word(s))
+	}
+	return out
 }
 
 // Reverse a string with rev.
