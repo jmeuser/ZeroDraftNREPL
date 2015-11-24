@@ -8,7 +8,25 @@ import (
 	"strings"
 )
 
+// A Word refers to an N event (action or object).
 type Word string
+func (w Word) isNoun() bool {
+	re := "^[0-9]+$" // zero draft simplification
+	b, _ := regexp.MatchString(re, string(w))
+	return b
+}
+
+func (w Word) isVerb() bool {
+	re := "^[!#$%&*+,-;<=>?@|]$"
+	b, _ := regexp.MatchString(re, string(w))
+	return b
+}
+
+func (w Word) isPronom() bool {
+	re:= "^[A-Za-z]+$"
+	b, _ := regexp.MatchString(re, string(w))
+	return b
+}
 
 // A Sentence is a stack of Words.
 type Sentence []Word
