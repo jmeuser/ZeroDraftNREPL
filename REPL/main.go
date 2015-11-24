@@ -9,17 +9,31 @@ import (
 )
 
 type Word string
-type Sentence []Word // A Sentence is a stack of Words.
+
+// A Sentence is a stack of Words.
+type Sentence []Word
+
+// Introduce a Word to the end of a Sentence.
 func (s Sentence) intr(w Word) Sentence {
-	return append(s,w)
+	return append(s, w)
 }
 
+// Eliminate the Word at the end of a Sentence.
 func (s Sentence) elim() Sentence {
 	return s[:len(s)-1]
 }
 
-func (s Sentence) top() Word {
+// last Word of a Sentence.
+func (s Sentence) last() Word {
 	return s[len(s)-1]
+}
+
+func (s Sentence) String() string {
+	var ss []string
+	for _, w := range s {
+		ss = append(ss, string(w))
+	}
+	return strings.Join(ss, " ")
 }
 
 type Noun uint // zero draft simplification
@@ -34,17 +48,17 @@ func main() {
 	var s Sentence
 	s = s.intr("test")
 	s = s.intr("super test")
-	fmt.Println(s.top())
+	fmt.Println(s.last())
 	s = s.elim()
 	fmt.Println(s)
 }
 
 func read() Sentence {
-	fmt.Print(" ") // prompt
+	fmt.Print(" ")                                      // prompt
 	in, _ := bufio.NewReader(os.Stdin).ReadString('\n') // read line from prompt
-	// ^ ignores reader errror!!!
+	//  ^ ignores reader errror!!!
 	in = strings.TrimSpace(in)
-	ss := regexp.MustCompile(" +").Split(in,-1) // assumes space separated words
+	ss := regexp.MustCompile(" +").Split(in, -1) // assumes space separated words
 	var out Sentence
 	for _, s := range ss {
 		out = out.intr(Word(s))
