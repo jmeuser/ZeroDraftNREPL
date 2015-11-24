@@ -63,12 +63,10 @@ type Adverb func(...Verb) Verb
 func main() {
 	x := read()
 	fmt.Println(x)
-	var s Sentence
-	s = s.intr("test")
-	s = s.intr("super test")
-	fmt.Println(s.last())
-	s = s.elim()
-	fmt.Println(s)
+	fmt.Println("Words:",len(x))
+	fmt.Println("Nouns:",x.where(Word.isNoun))
+	fmt.Println("Verbs:", x.where(Word.isVerb))
+	fmt.Println("Pronoms:", x.where(Word.isPronom))
 }
 
 func read() Sentence {
@@ -84,6 +82,17 @@ func read() Sentence {
 	return out
 }
 
+
+// VERY ineffecient where for sentences.
+func (s Sentence) where(Q func(Word)bool) []int {
+	var N []int
+	for i, w := range s {
+		if Q(w) {
+			N = append(N,i)
+		}
+	}
+	return N
+}
 // Reverse a string with rev.
 func rev(s string) string {
 	r := []rune(s)
