@@ -9,7 +9,18 @@ import (
 )
 
 type Word string
-type Sentence []Word
+type Sentence []Word // A Sentence is a stack of Words.
+func (s Sentence) intr(w Word) Sentence {
+	return append(s,w)
+}
+
+func (s Sentence) elim() Sentence {
+	return s[:len(s)-1]
+}
+
+func (s Sentence) top() Word {
+	return s[len(s)-1]
+}
 
 type Noun uint // zero draft simplification
 type Verb func(...Noun) Noun
@@ -20,6 +31,12 @@ type Adverb func(...Verb) Verb
 func main() {
 	x := read()
 	fmt.Println(x)
+	var s Sentence
+	s = s.intr("test")
+	s = s.intr("super test")
+	fmt.Println(s.top())
+	s = s.elim()
+	fmt.Println(s)
 }
 
 func read() Sentence {
@@ -30,7 +47,7 @@ func read() Sentence {
 	ss := regexp.MustCompile(" +").Split(in,-1) // assumes space separated words
 	var out Sentence
 	for _, s := range ss {
-		out = append(out, Word(s))
+		out = out.intr(Word(s))
 	}
 	return out
 }
