@@ -46,6 +46,17 @@ func (s Sentence) last() Word {
 	return s[len(s)-1]
 }
 
+// VERY ineffecient where for sentences.
+func (s Sentence) where(Q func(Word)bool) []int {
+	var N []int
+	for i, w := range s {
+		if Q(w) {
+			N = append(N,i)
+		}
+	}
+	return N
+}
+
 func (s Sentence) String() string {
 	var ss []string
 	for _, w := range s {
@@ -54,11 +65,11 @@ func (s Sentence) String() string {
 	return strings.Join(ss, " ")
 }
 
-type Noun uint // zero draft simplification
-type Verb func(...Noun) Noun
-type Monad Verb
-type Dyad Verb
-type Adverb func(...Verb) Verb
+type Noun Word
+type Verb Word
+type Adverb Word
+type Pronom Word
+type Copula Word
 
 func main() {
 	x := read()
@@ -82,17 +93,6 @@ func read() Sentence {
 	return out
 }
 
-
-// VERY ineffecient where for sentences.
-func (s Sentence) where(Q func(Word)bool) []int {
-	var N []int
-	for i, w := range s {
-		if Q(w) {
-			N = append(N,i)
-		}
-	}
-	return N
-}
 // Reverse a string with rev.
 func rev(s string) string {
 	r := []rune(s)
